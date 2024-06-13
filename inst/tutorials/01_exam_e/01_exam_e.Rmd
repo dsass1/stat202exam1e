@@ -1,0 +1,428 @@
+---
+title: "Exam 1"
+tutorial:
+  id: "isds_exam1e"
+  version: 0.1
+  
+output:
+  learnr::tutorial:
+    progressive: false
+    allow_skip: true
+    css: ["css/nu-theme.css"]
+runtime: shiny_prerendered
+description: >
+  This proficiency exam covers Preface - Chapter 4.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(tutorialExtras)
+library(gradethis)
+library(skimr)
+
+gradethis_setup(pass = "submitted",
+                fail = "submitted",
+                error_checker.message = "submitted",
+                fail.hint = FALSE
+                )
+
+tutorial_options(exercise.completion = FALSE)
+
+tutorialExtras_setup(is_exam = TRUE)
+
+knitr::opts_chunk$set(echo = FALSE)
+
+survey <- read_rds("data/survey.rds")
+
+```
+
+
+
+```{r, context = "server"}
+lock_server("lock", 
+            show_correct = FALSE,
+            ex = c("App1", "App2", "App3", "App4"), 
+            ex_pts = c(1, 5, 6, 6),
+            manual = c("App2-desc", "App4-desc"), 
+            manual_pts = c(1, 1)
+            #exclude = "Name"
+            )
+```
+
+```{r Name}
+# student name
+question_text("Name:",
+              answer_fn(function(value){
+                              if(length(value) >= 1 ) {
+                                return(mark_as(TRUE))
+                                }
+                              return(mark_as(FALSE) )
+                              }),
+              correct = "submitted",
+              incorrect = "submitted",
+              allow_retry = FALSE )
+```
+
+
+## Instructions
+
+```{r Code}
+# question_text("Enter the exam code provided to verify you are in class. This must be submitted at the beginning of your exam. Failure to do so will result in an exam grade of 0.",
+#               answer_fn(function(value){
+#                               if(str_remove_all(str_to_lower(value), " ") %in% c("bar1","20graph") ) {
+#                                 return(mark_as(TRUE))
+#                                 }
+#                               return(mark_as(FALSE) )
+#                               }),
+#               correct = "submitted",
+#               incorrect = "submitted",
+#               allow_retry = FALSE )
+```
+
+You have 60 minutes to complete this exam. The exam covers the material learned from Preface - Chapter 4. It is open note/open book - no using AI or eachother.
+
+Once you are finished:
+
+-   **Check Submissions** to make sure every question/exercise has been submitted.
+-   Click the **Lock Exam** button. You will not be able to make any changes once this is clicked. 
+-   Once the exam is locked you will be able to click on the **Download Exam** button.
+-   Submit the completed html to Canvas.
+
+
+## Concept (20 points)
+
+```{r Q}
+exam(
+  shuffle = TRUE,
+  caption = NULL,
+  #Q1
+  question_dropdown(
+  paste("The following code is in a code chunk:", htmltools::img(src="images/00_math5.png", height = 75, width = 200), "<br> What is the output?"),
+    answer(7),
+    answer("TRUE", TRUE),
+    answer("FALSE"),
+    answer("NA"),
+    answer("Error"),
+    answer(0),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted"
+  ),
+  question_dropdown(
+    "In a typical dataframe, rows correspond to ___.",
+    answer("columns"),
+    answer("observations", correct = TRUE),
+    answer("values"),
+    answer("variables"),
+    answer("cells"),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted"
+  ),
+  question_wordbank(
+  "Which of the following shows the... ",
+  choices = c("relationship between one numerical variable and one categorical variable?", "distirbution of one categorical variable?"),
+  wordbank = c("barplot", "histogram", "stacked barplot", 
+               "side-by-side boxplot", "scatterplot"),
+  answer(c("side-by-side boxplot", "barplot"), correct = TRUE),
+  allow_retry = TRUE,
+    correct = "submitted",
+  incorrect = "submitted"
+  ),
+  question_wordbank(
+  paste("The table provides the first 8 observations from a sample of 200 individuals, who reported their age, race, income, and job satisfaction score on a scale from 0 to 100.", htmltools::img(src="images/01_tableA.png", height = 300, width = 500)),
+  choices = c("Which type of graphic would be most useful for visualizing the relationship between income and score?",
+              "Which type of graphic would be most useful for visualizing the relationship between age and race?"),
+  wordbank = c("histogram", "scatterplot", "linegraph", "side-by-side boxplot", "stacked barplot"),
+  answer(c("scatterplot", "stacked barplot"), correct = TRUE),
+  allow_retry = TRUE,
+  correct = "submitted",
+  incorrect = "submitted"
+  ),
+  question_dropdown("Which of the following arguments in geom_bar()
+  will turn bar heights into proportions?",
+    answer("fill = `dodge`"),
+    answer("position = `dodge`"),
+    answer("position = `fill`", correct = TRUE),
+    answer("fill = `top`"),
+    answer("fill = `position`"),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted"),
+  question_dropdown(
+    paste("The histogram below shows the distribution of a large company's annual employee income. Which of the following statements is TRUE concerning this distribution? <br>", htmltools::img(src="images/02_income.png", height = 300, width = 500)),
+    answer("The distribution is skewed left and the mean is less than the median."),  
+    answer("The distribution is skewed right and the mean is less than the median."),
+    answer("The distribution is skewed left and the mean is greater than the median."),
+    answer("The distribution is skewed right and the mean is greater than the median.", correct = TRUE),
+    answer("The distribution is symmetric and the mean is equal to the median."),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted",
+    options= list(multi_part = "skew")
+  ),
+  question_wordbank(
+  "In the histogram from the previous problem. <br> Consider the person with the lowest income got a $5,000 pay cut (decrease). How will the following statistics be impacted?",
+    choices = c("mean/average", "IQR (Interquartile Range)"),
+    wordbank = c("increase", "decrease", "stay the same"),
+    answer(c("decrease", "stay the same"), correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted",
+    options= list(multi_part = "skew")
+  ),
+  question_wordbank(
+  "Match the following statistics with whether it measures centrality, variability, both, or neither.",
+    choices = c("Median", "Maximum", "Standard Deviation"),
+    wordbank = c("Centrality", "Variabiltiy/Spread", "Both Centrality and Variability", "Neither Centrality nor Variability"),
+    answer(c("Centrality",  "Neither Centrality nor Variability", "Variabiltiy/Spread"), correct = TRUE),
+    allow_retry = TRUE,
+    box = 4,
+    arrange = "ordered",
+    random_answer_order = FALSE,
+    correct = "submitted",
+    incorrect = "submitted"
+  ),
+  question_wordbank(
+  "Match the description with the appropriate function or package.",
+    choices = c("create a new variable", "keep only observations that meet a criteria", 
+                "select observations with only the n largest values of a variable",
+                "package used for data visualization"),
+    wordbank = c("slice_max()", "count()", "mutate()", "group_by()", "filter()", "select()", "summarize()", "arrange()", "ggplot()", "dplyr", "ggplot2", "+", "%>%"),
+    answer(c("mutate()", "filter()", "slice_max()", "ggplot2"), correct = TRUE),
+    allow_retry = TRUE,
+    arrange = "ordered",
+    correct = "submitted",
+    incorrect = "submitted"
+  ),
+  # question_wordbank(
+  # "Match the description with the appropriate function or package.",
+  #   choices = c("links data wrangling together", "specifies how variables are mapped to plot attributes", "package used for data visualization"),
+  #   wordbank = c("%>%", "aes()", "+", "%<%", "ggplot()", "geom_*()", "dplyr", "//", "ggplot2", "moderndive"),
+  #   answer(c("%>%", "aes()", "ggplot2"), correct = TRUE),
+  #   allow_retry = TRUE,
+  #   correct = "submitted",
+  #   incorrect = "submitted"
+  # ),
+  question_dropdown(
+  paste("How many rows and columns are outputted from the following code? <br> <br> season has categories: Winter, Spring, Summer, Fall <br> <br>", htmltools::img(src="images/03_codeA.png", height = 150, width = 400)),
+    answer("4 rows and 4 columns", correct = TRUE),
+    answer("4 rows and 12 columns"),
+    answer("3 rows and 4 columns"),
+    answer("4 rows and 3 columns"),
+    answer("3 rows and 12 columns"),
+    allow_retry = TRUE,
+    random_answer_order = TRUE,
+    correct = "submitted",
+    incorrect = "submitted"
+  ),
+  question_dropdown(
+  paste("Consider a hypothetical dataset purple_bus. This dataset contains a days worth of traveler bus ride information. The variables include information such as, time of day (morning, afternoon, night), passenger gender (female, male, other), passenger age, duration of ride, number of stops. The first few observations are shown below: <br> <br>", htmltools::img(src="images/04_purple_bus.png", height = 200, width = 400), "<br> <br> Which of the following will calculate the mean number of stops that occurred during either the morning or afternoon?"),
+    answer('purple_bus %>% select(time_day != "night") %>% summarize(mean = mean(stops))'),
+    answer('purple_bus %>% filter(time_day != "night") %>% summarize(mean = mean(time_day))'),
+    answer('purple_bus %>% filter(time_day == "morning" | time_day == "afternoon") %>% summarize(mean = mean(stops))', correct = TRUE),
+    answer('purple_bus %>% filter(time_day == "morning", "afternoon") %>% summarize(mean = mean(stops)) '),
+    answer('purple_bus %>% select(time_day, stops) %>% summarize(mean = mean(time_day))'),
+   answer('None of the above are correct'),
+    allow_retry = TRUE,
+    correct = "submitted",
+    incorrect = "submitted"
+  )
+  
+)
+
+```
+
+
+## Application (15 points)
+
+*Failure to use functions taught in class and opting for base R or AI solutions will result in automatic deductions from each application in which it is used.*
+
+<br>
+
+The following applications use the `survey` dataset which has been pre-loaded for you. All necessary libraries have been pre-loaded for you.
+
+This contains the responses to the questions asked the first day of class to students taking STAT202 at NU. For a detailed description of the variables and data click the Section titled "survey Data". You are welcome to use the Help feature of Posit Cloud if needed.
+
+For each application **only output/print the requested information**. If you are outputting miscellaneous information there will be a deduction.
+
+<br>
+
+Don't forget to click **Submit**. I recommend using **Submit** rather than "Run", that way you don't forget. You must submit every **code chunk**.
+
+### Application 1 (1 points)
+
+Load the `ggplot2` and `dplyr` package.
+
+```{r App1, exercise=TRUE}
+
+```
+
+```{r App1-solution, exercise.reveal_solution = FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r App1-check}
+grade_this_code(
+  correct = "submitted",
+  incorrect = "submitted"
+)
+```
+
+*All applications will still run even if this is incorrect.*
+
+### Application 2 (5 points)
+
+Construct a scatterplot of `followers_insta` by `height_inches`. Set the `color` equal to `personality`.
+
+```{r App2, exercise=TRUE}
+
+```
+
+```{r App2-solution, exercise.reveal_solution = FALSE}
+ggplot(survey, aes(x = height_inches, y = followers_insta, color = personality)) +
+  geom_point()
+```
+
+```{r App2-check}
+grade_this_code(
+  correct = "submitted",
+  incorrect = "submitted"
+)
+```
+
+In **one sentence** describe the relationship between a student's height and the number of follower on Instagram. In **one sentence** state why you are or are not surprised by this relationship.
+
+```{r App2-desc}
+question_text("", incorrect = "submitted",
+              answer("ManuallyGradedEverythingWrong", 
+                     correct = TRUE),
+              allow_retry = TRUE,
+              rows = 6)
+```
+
+
+
+### Application 3 (4 points)
+
+For First year students, let's determine if there is a difference in the distribution of followers on Instagram for introverts and extroverts.
+
+In other words,
+
+- start with the `survey` data
+- include only students that have a `school_year` of "First year"
+- compute the mean, standard deviation, and count of `followers_insta` by `personality`
+- print/output the results with the lowest mean on top
+
+```{r App3, exercise=TRUE}
+
+```
+
+
+```{r App3-solution, exercise.reveal_solution = FALSE}
+survey %>%
+  filter(school_year == "First year") %>%
+  group_by(personality) %>%
+  summarize(mean = mean(followers_insta, na.rm = TRUE),
+            sd = sd(followers_insta, na.rm = TRUE),
+            count = n()) %>%
+  arrange(mean)
+```
+
+```{r App3-check}
+grade_this_code(
+  correct = "submitted",
+  incorrect = "submitted"
+)
+```
+
+### Application 4 (5 points)
+
+Construct a histogram of `followers_insta`. Facet the histogram based on `personality`. Choose an appropriate number of bins AND have it defined in code. Change the border color to "white".
+
+```{r App4, exercise=TRUE}
+
+
+```
+
+```{r App4-solution, exercise.reveal_solution = FALSE}
+ggplot(survey, aes(x = followers_insta)) +
+  geom_histogram(color = "white", bins = 30)+
+  facet_wrap(~ personality)
+```
+
+```{r App4-check}
+grade_this_code(
+  correct = "submitted",
+  incorrect = "submitted"
+)
+```
+
+Describe and compare the histogram.
+
+```{r App4-desc}
+question_text("", incorrect = "submitted",
+              answer("ManuallyGradedEverythingWrong", 
+                     correct = TRUE),
+              allow_retry = TRUE,
+              rows = 10)
+```
+
+## survey Data
+
+You are welcome to open the dataset in Posit Cloud as well if the information provided below is not sufficient for you.
+
+Variables:
+
+- `quarter` -- Identifies in which quarter the student took stat 202 (winter 2023, fall 2022, summer 2022, spring 2022, winter 2022, fall 2021)
+- `gender_ident` -- "Which gender do you identify as (Male, Female). "Other" was removed to protect against the possibility of having their responses identified by other students.""
+- `school_year` -- "What year are you in school? (First year, Sophomore, Junior, Senior, Other)"
+- `num_party` -- "On average (approx.) how many parties a month do you attend?"
+- `personality` -- "Are you more of an introvert or extrovert? (Introvert, Extrovert)"
+- `height_inches` -- "How tall are you? (in inches)"
+- `happy` -- "How happy are you? (Very happy, Pretty happy, Not too happy, Don't know)"
+- `campus_housing` -- "Where do you live on campus? (North campus, South campus, Neither)"
+- `followers_insta` -- "How many followers do you have on Instagram (approx.)?""
+- `followers_tiktok` -- "How many followers do you have on TikTok (approx.)?""
+- `salary` -- "What do you expect your starting salary to be after graduation, to the nearest thousand dollars? (ex: 47,000)"
+
+```{r}
+glimpse(survey)
+```
+
+```{r}
+skim(survey)
+```
+
+## Submit
+
+Once you are finished:
+
+-   Click "Check submissions" to make sure all questions and exercises are submitted -- **Un-submitted questions will receive a 0.**
+
+```{r}
+lock_check_ui(id = "lock")
+```
+
+<br>
+<br>
+
+-   Do **NOT** lock the exam until you have verified you have submitted all problems. Consider going back and clicking Submit on each Application again to ensure you have submitted your most recent solution.
+-   Once all questions/exercises are submitted click the **Lock Exam** button. Once you click this you will not be able to make any changes to your exam! 
+
+<br>
+
+-   Once the lock is pressed a **Download Exam** option will become available.
+-   Download and **Check your HTML!**
+-   Upload the html to Canvas.
+
+```{r}
+lock_button_ui(id = "lock")
+```
